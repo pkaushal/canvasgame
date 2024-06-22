@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Projectile Game</title>
+    <style>
+        canvas {
+            background-color: #f0f0f0;
+            display: block;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="gameCanvas" width="800" height="600"></canvas>
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        let projectiles = [];
+        const gravity = 0.2;
+
+        canvas.addEventListener('click', (event) => {
+            const angle = Math.atan2(event.clientY - canvas.height / 2, event.clientX - canvas.width / 2);
+            const speed = 5;
+            const velocity = {
+                x: Math.cos(angle) * speed,
+                y: Math.sin(angle) * speed
+            };
+            projectiles.push({
+                x: canvas.width / 2,
+                y: canvas.height / 2,
+                velocity
+            });
+        });
+
+        function updateGame() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            projectiles.forEach(projectile => {
+                projectile.velocity.y += gravity; // Apply gravity
+                projectile.x += projectile.velocity.x;
+                projectile.y += projectile.velocity.y;
+
+                // Draw projectile
+                ctx.beginPath();
+                ctx.arc(projectile.x, projectile.y, 5, 0, Math.PI * 2);
+                ctx.fillStyle = 'black';
+                ctx.fill();
+            });
+
+            // Remove projectiles that go off screen
+            projectiles = projectiles.filter(projectile => projectile.x >= 0 && projectile.x <= canvas.width && projectile.y <= canvas.height);
+
+            requestAnimationFrame(updateGame);
+        }
+
+        updateGame();
+    </script>
+</body>
+</html>

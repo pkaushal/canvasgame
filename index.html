@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Canvas Game</title>
+    <style>
+        canvas {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="gameCanvas" width="800" height="600"></canvas>
+    <script>
+        // JavaScript code for the game logic goes here
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // Character object
+        const character = {
+            x: canvas.width / 2, // initial x position
+            y: canvas.height / 2, // initial y position
+            speed: 5, // movement speed
+            direction: null // current movement direction
+        };
+
+        // Keyboard event listeners
+        document.addEventListener('keydown', handleKeyDown);
+        document.addEventListener('keyup', handleKeyUp);
+
+        // Handle key down event
+        function handleKeyDown(event) {
+            if (event.key === 'ArrowLeft') {
+                character.direction = 'left';
+            } else if (event.key === 'ArrowRight') {
+                character.direction = 'right';
+            }
+        }
+
+        // Handle key up event
+        function handleKeyUp(event) {
+            if (event.key === 'ArrowLeft' && character.direction === 'left') {
+                character.direction = null;
+            } else if (event.key === 'ArrowRight' && character.direction === 'right') {
+                character.direction = null;
+            }
+        }
+
+ 
+// Load the image
+var characterImage = new Image();
+characterImage.src = 'images/char2.png'; // replace with your image path
+
+// Game loop
+function gameLoop() {
+    // Clear canvas
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Update game state
+    if (character.direction === 'left') {
+        character.x -= character.speed;
+    } else if (character.direction === 'right') {
+        character.x += character.speed;
+    }
+
+    // Render game objects
+    ctx.drawImage(characterImage, character.x, character.y, 50, 50); // Draw character as an image
+
+    // Call game loop again
+    requestAnimationFrame(gameLoop);
+}
+        // Handle key down event
+        function handleKeyDown(event) {
+            if (event.key === 'ArrowLeft') {
+            character.direction = 'left';
+            } else if (event.key === 'ArrowRight') {
+            character.direction = 'right';
+            } else if (event.key === ' ') { // Spacebar pressed
+            shootBullet();
+            }
+        }
+        var bullets = ['bullet1', 'bullet2', 'bullet3'];
+
+        // Shoot a bullet
+        function shootBullet() {
+            // Create a new bullet object
+            const bullet = {
+            x: character.x + 25, // initial x position (center of character)
+            y: character.y, // initial y position (top of character)
+            speed: 10, // bullet speed
+            direction: 'up' // bullet direction
+            };
+
+            // Add the bullet to an array or perform any other logic to handle bullets
+            // For example, you can have an array called "bullets" and push the bullet object into it
+            bullets.push(bullet);
+        }        
+
+        // Start the game loop
+        gameLoop();
+    </script>
+</body>
+</html>
