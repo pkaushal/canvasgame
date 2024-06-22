@@ -87,7 +87,7 @@
                 const mouseX = event.clientX - canvas.offsetLeft;
                 const mouseY = event.clientY - canvas.offsetTop;
                 const angle = Math.atan2(mouseY - towerY, mouseX - towerX);
-                const speed = 5;
+                const speed = 8;
                 bombVX = Math.cos(angle) * speed;
                 bombVY = Math.sin(angle) * speed;
 
