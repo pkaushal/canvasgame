@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Canvas Game</title>
+    <style>
+        canvas {
+            border: 1px solid black;
+            cursor: crosshair;
+            transform: translateY(2px);
+        }
+    </style>
+</head>
+<body>
+    <canvas id="gameCanvas" width="800" height="600"></canvas>
+
+    <script>
+        // Get the canvas element
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // Tower position
+        const towerX = 100;
+        const towerY = canvas.height - 100;
+
+        // Projectile position
+        let projectileX = towerX + 50;
+        let projectileY = towerY;
+
+        // Target position
+        let targetX = canvas.width - 100;
+        let targetY = canvas.height - 50;
+
+        // Game loop
+        function gameLoop() {
+            // Clear the canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw tower
+            ctx.fillStyle = 'gray';
+            ctx.fillRect(towerX, towerY, 100, 100);
+
+            // Draw projectile
+            ctx.fillStyle = 'red';
+            ctx.fillRect(projectileX, projectileY, 10, 10);
+
+            // Draw target
+            ctx.fillStyle = 'blue';
+            ctx.fillRect(targetX, targetY, 50, 50);
+
+            // Update projectile position
+            projectileX += 2;
+            projectileY -= 1;
+
+            // Check if projectile hits the target
+            if (projectileX >= targetX && projectileX <= targetX + 50 && projectileY >= targetY && projectileY <= targetY + 50) {
+                // Projectile hit the target
+                console.log('Target hit!');
+            }
+
+            // Request the next animation frame
+            requestAnimationFrame(gameLoop);
+        }
+
+        // Start the game loop
+        gameLoop();
+    </script>
+</body>
+</html>

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tower Game</title>
+    <style>
+        canvas {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="gameCanvas" width="800" height="600"></canvas>
+
+    <script>
+        // Get the canvas element
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // Tower position
+        const towerX = 50;
+        const towerY = canvas.height - 100;
+
+        // Target position
+        let targetX = canvas.width - 100;
+        let targetY = canvas.height - 50;
+
+        // Bomb position and velocity
+        let bombX = towerX + 20;
+        let bombY = towerY;
+        let bombVX = 0;
+        let bombVY = 0;
+
+        // Flag to indicate if bomb is fired
+        let bombFired = false;
+
+        // Function to update the game state
+        function update() {
+            // Clear the canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw the tower
+            ctx.fillStyle = 'gray';
+            ctx.fillRect(towerX, towerY, 40, 100);
+
+            // Draw the target
+            ctx.fillStyle = 'red';
+            ctx.fillRect(targetX, targetY, 50, 50);
+
+            // Draw the bomb if fired
+            if (bombFired) {
+                // Update bomb position
+                bombX += bombVX;
+                bombY += bombVY;
+
+                // Apply gravity to the bomb
+                bombVY += 0.1;
+
+                // Draw the bomb
+                ctx.fillStyle = 'black';
+                ctx.beginPath();
+                ctx.arc(bombX, bombY, 10, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Check if the bomb hits the target
+                if (bombY >= targetY && bombX >= targetX && bombX <= targetX + 50) {
+                    // Bomb hit the target
+                    alert('Target hit!');
+                    resetGame();
+                }
+
+                // Check if the bomb goes out of bounds
+                if (bombY > canvas.height) {
+                    // Bomb missed the target
+                    alert('Missed!');
+                    resetGame();
+                }
+            }
+
+            // Request the next frame
+            requestAnimationFrame(update);
+        }
+
+        // Function to handle mouse click event
+        function handleClick(event) {
+            if (!bombFired) {
+                // Calculate the velocity based on mouse position
+                const mouseX = event.clientX - canvas.offsetLeft;
+                const mouseY = event.clientY - canvas.offsetTop;
+                const angle = Math.atan2(mouseY - towerY, mouseX - towerX);
+                const speed = 5;
+                bombVX = Math.cos(angle) * speed;
+                bombVY = Math.sin(angle) * speed;
+
+                // Set the bomb as fired
+                bombFired = true;
+            }
+        }
+
+        // Function to reset the game state
+        function resetGame() {
+            bombX = towerX + 20;
+            bombY = towerY;
+            bombVX = 0;
+            bombVY = 0;
+            bombFired = false;
+        }
+
+        // Add event listener for mouse click
+        canvas.addEventListener('click', handleClick);
+
+        // Start the game loop
+        update();
+    </script>
+</body>
+</html>
